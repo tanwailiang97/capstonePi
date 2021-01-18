@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from time import sleep, localtime
+from time import sleep, localtime, time
 from mlxtemp import getTemp
 from gpiosetup import gpioInit
 from tm1637 import TM1637
@@ -8,7 +8,11 @@ import statistics
 gpioInit()
 DIO = 16
 CLK = 20
+prevTime = 0
 mTemp = []
+
+if __name__ == '__main__':
+    tm = TM1637(CLK, DIO)
 
 def updateTemp(channel):
     tempList = []
@@ -17,19 +21,27 @@ def updateTemp(channel):
     if len(tempList)>0:
         outTemp = statistics.median(tempList)
         print(outTemp)
-        mTemp[0] = int(outTemp)
-        mTemp[1] = int((outTemp*100+0.5)%100)
+        if outTemp > 35.0 :
+            mTemp[0] = int(outTemp)
+            mTemp[1] = int((outTemp*100+0.5)%100)
+            tm.numbers(mTemp[0],mTemp[1],True)
+            tm.brightness(1)
+            prevTime = time() + 1.5
 
+def motorTurn(channel):
+    pwm = GPIO.PWM(12, 1000)
+    pwm.start(50)
+    sleep(0.2)
+    pwm.ChangeDutyCycle(0)
+
+
+GPIO.add_event_detect(26,GPIO.FALLING,callback = motorTurn)
 GPIO.add_event_detect(40,GPIO.FALLING,callback = updateTemp)
 
-if __name__ == '__main__':
-    tm = TM1637(CLK, DIO)
-    tm.brightness(1)
-
-    # clock = Clock(tm)
-    # clock.run()
-
 while True:
-    sleep(0.5)
-    tm.numbers(mTemp[0],mTemp[1] True)
+    if time() - prevTime > 0.5 :
+        prevTime = time()
+        tm.numbers(mTemp[0],mTemp[1],True)
+        tm.brightness(0)
+    #sleep(0.5)
 

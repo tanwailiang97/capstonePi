@@ -16,7 +16,7 @@ def updateTemp(channel):
     tempList = []
     while not GPIO.input(40):
         tempList.append(getTemp())
-    if len(tempList>0):
+    if len(tempList)>0:
         outTemp = statistics.median(tempList)
         print(outTemp)
         return outTemp

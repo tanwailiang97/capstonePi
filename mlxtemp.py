@@ -1,7 +1,7 @@
 import statistics
 import RPi.GPIO as GPIO
-from smbus2 import smbus2
-from mlx90614 import mlx90614
+from smbus2 import SMBus
+from mlx90614 import MLX90614
 
 def getTemp():
     bus = SMBus(1)

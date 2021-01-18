@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 from time import sleep
-from .mlxtemp import updateTemp
+from mlxtemp import updateTemp
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)

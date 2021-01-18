@@ -13,6 +13,8 @@ mTemp = [0,0]
 
 if __name__ == '__main__':
     tm = TM1637(CLK, DIO)
+    pwm = GPIO.PWM(19, 1000)
+    pwm.start(0)
 
 def updateTemp(channel):
     tempList = []
@@ -29,8 +31,7 @@ def updateTemp(channel):
             prevTime = time() + 1.5
 
 def motorTurn(channel):
-    pwm = GPIO.PWM(18, 1000)
-    pwm.start(50)
+    pwm.ChangeDutyCycle(50)
     sleep(0.2)
     pwm.ChangeDutyCycle(0)
 

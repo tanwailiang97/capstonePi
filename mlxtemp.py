@@ -1,4 +1,3 @@
-import statistics
 import RPi.GPIO as GPIO
 from smbus2 import SMBus
 from mlx90614 import MLX90614

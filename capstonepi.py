@@ -5,8 +5,6 @@ from gpiosetup import gpioInit
 from tm1637 import TM1637
 import statistics
 
-
-
 gpioInit()
 DIO = 16
 CLK = 20
@@ -20,7 +18,7 @@ def updateTemp(channel):
         outTemp = statistics.median(tempList)
         print(outTemp)
         mTemp[0] = int(outTemp)
-        mTemp[1] = int((outTemp*100%100)+0.5)
+        mTemp[1] = int((outTemp*100+0.5)%100)
 
 GPIO.add_event_detect(40,GPIO.FALLING,callback = updateTemp)
 

@@ -9,14 +9,14 @@ gpioInit()
 DIO = 16
 CLK = 20
 prevTime = 0
-mTemp = []
+mTemp = [0,0]
 
 if __name__ == '__main__':
     tm = TM1637(CLK, DIO)
 
 def updateTemp(channel):
     tempList = []
-    while not GPIO.input(40):
+    while not GPIO.input(21):
         tempList.append(getTemp())
     if len(tempList)>0:
         outTemp = statistics.median(tempList)
@@ -29,14 +29,13 @@ def updateTemp(channel):
             prevTime = time() + 1.5
 
 def motorTurn(channel):
-    pwm = GPIO.PWM(12, 1000)
+    pwm = GPIO.PWM(18, 1000)
     pwm.start(50)
     sleep(0.2)
     pwm.ChangeDutyCycle(0)
 
-
-GPIO.add_event_detect(26,GPIO.FALLING,callback = motorTurn)
-GPIO.add_event_detect(40,GPIO.FALLING,callback = updateTemp)
+GPIO.add_event_detect(12,GPIO.FALLING,callback = motorTurn)
+GPIO.add_event_detect(21,GPIO.FALLING,callback = updateTemp)
 
 while True:
     if time() - prevTime > 0.5 :

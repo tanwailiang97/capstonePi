@@ -181,7 +181,7 @@ class TM1637(object):
         num2 = max(-9, min(num2, 99))
         segments = self.encode_string('{0:0>2d}{1:0>2d}'.format(num1, num2))
         if colon:
-            segments[1] |= 0x40  # colon on
+            segments[1] |= 0x80  # colon on
         self.write(segments)
 
     def temperature(self, num):
@@ -197,7 +197,7 @@ class TM1637(object):
     def show(self, string, colon=False):
         segments = self.encode_string(string)
         if len(segments) > 1 and colon:
-            segments[1] |= 64
+            segments[1] |= 128
         self.write(segments[:4])
 
     def scroll(self, string, delay=250):

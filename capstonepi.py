@@ -3,9 +3,12 @@ from time import sleep, localtime, time
 from mlxtemp import getTemp
 from gpiosetup import gpioInit
 from tm1637 import TM1637
+from key import KEY
+import requests
 import statistics
 
 gpioInit()
+url = "http://tanwailiang.ddns.net/phone/temp"
 DIO = 16
 CLK = 20
 prevTime = 0
@@ -32,6 +35,9 @@ def updateTemp(channel):
             tm.brightness(1)
             global flag
             flag = 2
+            postObj = {'temperature':outTemp, 'token':KEY}
+            postReq = requests.post(url, data = postObj)
+            print(postReq)
 
 def motorTurn(channel):
     pwm.ChangeDutyCycle(50)

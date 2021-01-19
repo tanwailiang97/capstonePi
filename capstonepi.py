@@ -10,6 +10,8 @@ DIO = 16
 CLK = 20
 prevTime = 0
 mTemp = [0,0]
+global flag
+flag = 0
 
 if __name__ == '__main__':
     tm = TM1637(CLK, DIO)
@@ -28,11 +30,12 @@ def updateTemp(channel):
             mTemp[1] = int((outTemp*100+0.5)%100)
             tm.numbers(mTemp[0],mTemp[1],True)
             tm.brightness(1)
-            prevTime = time() + 1.5
+            global flag
+            flag = 2
 
 def motorTurn(channel):
     pwm.ChangeDutyCycle(50)
-    sleep(0.2)
+    sleep(0.8)
     pwm.ChangeDutyCycle(0)
 
 GPIO.add_event_detect(12,GPIO.FALLING,callback = motorTurn)
@@ -40,8 +43,9 @@ GPIO.add_event_detect(21,GPIO.FALLING,callback = updateTemp)
 
 while True:
     if time() - prevTime > 0.5 :
+        if flag == 0:
+            tm.write([0,0,0,0])
+        elif flag > 0: 
+            flag  = flag -1
         prevTime = time()
-        tm.numbers(mTemp[0],mTemp[1],True)
-        tm.brightness(0)
-    #sleep(0.5)
 

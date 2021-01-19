@@ -35,7 +35,7 @@ def updateTemp(channel):
             tm.brightness(1)
             global flag
             flag = 2
-            postObj = {'temperature':outTemp, 'token':KEY}
+            postObj = {'temp':outTemp, 'token':KEY}
             postReq = requests.post(url, data = postObj)
             print(postReq)
 
